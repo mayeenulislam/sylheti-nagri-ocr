@@ -1,0 +1,9 @@
+apsisocr==0.0.7
+fastdeploy-python==1.0.7
+numpy==1.23.5
+opencv-python==4.11.0.86
+# opencv-python-headless==4.11.0.86
+streamlit
+onnxruntime
+mltu
+tensorflow
