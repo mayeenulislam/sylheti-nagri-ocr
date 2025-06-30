@@ -99,7 +99,7 @@ Error loading Detector model: [WinError 3] The system cannot find the path speci
 
 Solution for this error: Run the command -
 ```bash
-mkdir C:\Users\HTC\.apsis_ocr\line
+mkdir C:\Users\{YOUR_USERNAME}\.apsis_ocr\line
 ```
 
 Then run the Streamlit app again -
