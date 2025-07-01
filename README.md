@@ -41,7 +41,7 @@ To run this application, you need to have the following Python packages installe
 
     ```bash
     # Using Conda
-    conda create -n sylheti_ocr_env python=3.9 # Or your preferred Python version (3.9 used in recent examples)
+    conda create -n sylheti_ocr_env python=3.9.20 # Or your preferred Python version (3.9 used in recent examples)
     conda activate sylheti_ocr_env
 
     # Using venv
