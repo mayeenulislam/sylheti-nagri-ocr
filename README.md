@@ -9,6 +9,10 @@ This application performs word detection and cropping on images containing Sylhe
 - **OCR**: Performs Optical Character Recognition (OCR) on the cropped word images.
 - **HTML Generation**: Generates an HTML reconstruction of the detected text.
 
+## Demo
+
+![A quick demo of the application](./quick-demo.gif)
+
 ## Technologies Used
 
 -   **Streamlit**: For creating the interactive web application interface.
