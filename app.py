@@ -11,6 +11,7 @@ from functools import lru_cache
 import cv2
 import numpy as np
 import gradio as gr
+import spaces
 
 from apsisocr import PaddleDBNet
 import tensorflow as tf
@@ -667,6 +668,7 @@ def _as_rgb(bgr_img):
     return cv2.cvtColor(bgr_img, cv2.COLOR_BGR2RGB)
 
 
+@spaces.GPU(duration=60)
 def _ui_detect_and_crop(image_rgb):
     state, viz, meta, zip_path, json_path, status = detect_and_crop(image_rgb)
     return (
@@ -679,6 +681,7 @@ def _ui_detect_and_crop(image_rgb):
     )
 
 
+@spaces.GPU(duration=60)
 def _ui_run_ocr(model_name, image_rgb, state):
     viz = meta = zip_path = json_path = None
     if not state or not state.get("crops"):
