@@ -1,0 +1,17 @@
+.git
+.gitignore
+docs
+sample_cropping
+sample_html
+sample_page
+OCR_Info
+NotoSansSylotiNagri-Regular.ttf
+Surma-4.000/*.woff
+Surma-4.000/*.woff2
+Surma-4.000/*.txt
+__pycache__
+*.pyc
+.venv
+venv
+.env
+.DS_Store
