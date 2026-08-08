@@ -696,29 +696,37 @@ with gr.Blocks(title="Sylheti Nagri OCR") as demo:
     gr.Markdown("# Sylheti Nagri OCR and HTML Reconstruction\n"
                 "Upload an image containing Sylheti Nagri script, or pick a sample, "
                 "to detect words, crop them, and generate an HTML reconstruction.")
-    model_choice = gr.Radio(["CRNN", "ViT"], value="CRNN", label="OCR Model")
-    sample_choice = gr.Dropdown(
-        ["Upload my own"] + SAMPLE_IMAGES,
-        value="Upload my own",
-        label="No Nagri image handy? Pick a sample:",
-    )
-    image_input = gr.Image(type="numpy", label="Image (upload or from sample)")
 
+    # ROW 1: settings (left) | image input + step 1 (right)
     with gr.Row():
-        detect_btn = gr.Button("Step 1: Detect & Crop")
-        ocr_btn = gr.Button("Step 2: Run OCR & Generate HTML")
+        with gr.Column():
+            model_choice = gr.Radio(["CRNN", "ViT"], value="CRNN", label="OCR Model")
+            sample_choice = gr.Dropdown(
+                ["Upload my own"] + SAMPLE_IMAGES,
+                value="Upload my own",
+                label="No Nagri image handy? Pick a sample:",
+            )
+        with gr.Column():
+            image_input = gr.Image(type="numpy", label="Image (upload or from sample)")
+            detect_btn = gr.Button("Step 1: Detect & Crop")
 
-    status = gr.Markdown()
-
+    # ROW 2: detected boxes (left) | metadata + downloads (right)
     with gr.Row():
         with gr.Column():
             viz_out = gr.Image(label="Detected Word Bounding Boxes")
-            html_out = gr.HTML(label="HTML Reconstruction Preview")
         with gr.Column():
-            metadata_out = gr.JSON(label="Metadata")
-            zip_out = gr.File(label="Download Cropped Words (ZIP)")
-            json_out = gr.File(label="Download Metadata (JSON)")
-            html_file_out = gr.File(label="Download HTML Reconstruction")
+            metadata_out = gr.JSON(label="Metadata (JSON)")
+            with gr.Row():
+                zip_out = gr.File(label="Download Cropped Words (ZIP)")
+                json_out = gr.File(label="Download Metadata (JSON)")
+
+    # ROW 3: step 2 (primary) + HTML output + download
+    ocr_btn = gr.Button("Step 2: Run OCR & Generate HTML", variant="primary")
+    html_out = gr.HTML(label="HTML Output")
+    with gr.Row():
+        html_file_out = gr.File(label="Download HTML Reconstruction", scale=0)
+
+    status = gr.Markdown()
 
     state = gr.State()
 
