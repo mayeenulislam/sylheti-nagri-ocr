@@ -556,7 +556,7 @@ def get_recognizer(name):
 SAMPLE_IMAGES = [
     {"file": "Gospel-Mathew.PNG", "label": "Gospel of Mathew"},
     {"file": "Book-Exodus.JPG", "label": "Book of Exodus"},
-    {"file": "Sylheti-Folklore.PNG", "label": "Sylheti Folklore: Shaat Koinar Bakhan"},
+    {"file": "Sylheti-Folklore.PNG", "label": "Folklore: Shaat Koinar Bakhan"},
 ]
 PAD = 3
 
@@ -679,12 +679,23 @@ def _ui_detect_and_crop(image_rgb):
     )
 
 
-def _ui_run_ocr(model_name, state):
+def _ui_run_ocr(model_name, image_rgb, state):
+    viz = meta = zip_path = json_path = None
+    if not state or not state.get("crops"):
+        state, viz, meta, zip_path, json_path, status = detect_and_crop(image_rgb)
+        if status:
+            return (None, None, None, None, None, None, None, None, f"Run Step 1 first. {status}")
     html, html_path, status = run_ocr(model_name, state)
     return (
         html,
         html_path,
+        state,
+        _as_rgb(viz) if viz is not None else None,
+        meta,
+        zip_path,
+        json_path,
         status if status else "Step 2 complete: HTML generated.",
+        html if html else "",
     )
 
 
@@ -713,7 +724,7 @@ with gr.Blocks(title="Sylheti Nagri OCR") as demo:
     with gr.Row():
         with gr.Column():
             model_choice = gr.Radio(["CRNN", "ViT"], value="CRNN", label="OCR Model")
-            gr.Markdown("**No Nagri image handy? Pick a sample:**")
+            gr.Markdown("**Upload an Image Containing Nagri or Use a Sample:**")
             sample_buttons = []
             with gr.Row():
                 for sample in SAMPLE_IMAGES:
@@ -746,11 +757,14 @@ with gr.Blocks(title="Sylheti Nagri OCR") as demo:
                 zip_out = gr.File(label="Download Cropped Words (ZIP)")
                 json_out = gr.File(label="Download Metadata (JSON)")
 
-    # ROW 3: step 2 (primary) + HTML output + download
+    # ROW 3: step 2 (primary) + HTML output + download + copy
     ocr_btn = gr.Button("Step 2: Run OCR & Generate HTML", variant="primary")
     html_out = gr.HTML(label="HTML Output")
     with gr.Row():
         html_file_out = gr.File(label="Download HTML Reconstruction", scale=0)
+        copy_btn = gr.Button("Copy HTML", scale=0)
+    html_src = gr.Textbox(visible=False)
+    copy_status = gr.Markdown()
 
     status = gr.Markdown()
 
@@ -763,8 +777,14 @@ with gr.Blocks(title="Sylheti Nagri OCR") as demo:
     )
     ocr_btn.click(
         _ui_run_ocr,
-        [model_choice, state],
-        [html_out, html_file_out, status],
+        [model_choice, image_input, state],
+        [html_out, html_file_out, state, viz_out, metadata_out, zip_out, json_out, status, html_src],
+    )
+    copy_btn.click(
+        None,
+        [html_src],
+        [copy_status],
+        js="(src) => { navigator.clipboard.writeText(src || ''); return 'HTML copied to clipboard.'; }",
     )
 
 
