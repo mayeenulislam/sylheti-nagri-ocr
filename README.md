@@ -1,6 +1,22 @@
+---
+title: Sylheti Nagri OCR
+emoji: 🔤
+colorFrom: blue
+colorTo: purple
+sdk: gradio
+app_file: app.py
+pinned: false
+---
+
 # Sylheti Nagri OCR Application
 
 Detects, crops, and performs OCR on Sylheti Nagri script images, then reconstructs the text as HTML.
+
+## Run locally
+
+```bash
+source sylheti_ocr_env/bin/activate && pip install -r requirements.txt && python app.py
+```
 
 ## Features
 
@@ -29,8 +45,10 @@ mkdir -p ~/.apsis_ocr/line
 ## Run
 
 ```bash
-streamlit run streamlit_app.py
+python app.py
 ```
+
+(Opens the Gradio UI at `http://127.0.0.1:7860`.)
 
 ## Usage
 
