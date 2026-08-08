@@ -1,64 +1,50 @@
----
-title: Sylheti Nagri OCR
-emoji: 🔤
-colorFrom: blue
-colorTo: purple
-sdk: gradio
-sdk_version: 5.50.0
-app_file: app.py
-pinned: false
----
+# Sylheti Nagri OCR
 
-# Sylheti Nagri OCR Application
-
-Detects, crops, and performs OCR on Sylheti Nagri script images, then reconstructs the text as HTML.
-
-## Run locally
-
-```bash
-source sylheti_ocr_env/bin/activate && pip install -r requirements.txt && python app.py
-```
+Detects and crops Sylheti Nagri script words in images, runs OCR (CRNN + ViT), and reconstructs the text as HTML with the Surma font embedded.
 
 ## Features
 
 - Word detection and cropping
-- OCR on cropped word images
+- OCR on cropped word images (CRNN and ViT models)
 - HTML reconstruction of detected text
 - Downloadable ZIP of cropped words and metadata
 
-## Requirements
+## Run locally
 
-- Python 3.10
-- Dependencies in `requirements.txt`
-
-## Installation
+Requires Python 3.10 and model weights (see below).
 
 ```bash
 python -m venv sylheti_ocr_env
-# macOS/Linux:
 source sylheti_ocr_env/bin/activate
-# Windows:
-sylheti_ocr_env\Scripts\activate
 pip install -r requirements.txt
-mkdir -p ~/.apsis_ocr/line
-```
-
-## Run
-
-```bash
 python app.py
 ```
 
-(Opens the Gradio UI at `http://127.0.0.1:7860`.)
+Opens the Gradio UI at `http://127.0.0.1:7860`.
 
-## Usage
+First model load seeds detector files from `models/detector/word/` into `~/.apsis_ocr/word/` automatically.
 
-1. Upload an image (`.png`, `.jpg`, `.jpeg`)
-2. Wait for word detection and sorting
-3. Download cropped words/metadata or click **Run OCR and Create HTML**
-4. Preview and download the HTML reconstruction
+## Tests
+
+Plain assert scripts, run from the repo root inside the venv:
+
+```bash
+python scripts/test_core.py
+python scripts/test_loaders.py
+python scripts/test_pipeline.py
+python scripts/test_seed.py
+python scripts/smoke_test.py   # slow: end-to-end on 3 samples, both models
+```
+
+## Model weights
+
+Keep at the repo root (all required at runtime):
+
+- `model_weights.weights.h5` — CRNN OCR (~1.1 MB)
+- `vit_model_weights.weights.h5` — ViT OCR (~11 MB)
+- `Surma-4.000/Surma-Regular.ttf` — output font
 
 ## Notes
 
-- CPU inference.
-- Requires `model_weights.weights.h5`, `vit_model_weights.weights.h5`, and `Surma-4.000/Surma-Regular.ttf` in the project directory.
+- CPU inference only.
+- Do not upgrade pinned dependencies in `requirements.txt` (numpy, opencv, apsisocr, fastdeploy-python, tensorflow) — see `AGENTS.md`.
