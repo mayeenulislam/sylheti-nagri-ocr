@@ -1,12 +1,17 @@
 ---
 title: Sylheti Nagri OCR
-emoji: 🔤
+emoji: 📚
 colorFrom: blue
-colorTo: purple
+colorTo: indigo
 sdk: gradio
 app_file: app.py
-pinned: false
+pinned: true
+license: mit
+thumbnail: >-
+  https://cdn-uploads.huggingface.co/production/uploads/6562971fb9218ed1a77be0c1/5hS1aGQDxSvNXCOvTV1dg.png
+short_description: Detects and crops Sylheti Nagri script words in images, runs
 ---
+
 # Sylheti Nagri OCR
 
 Detects and crops Sylheti Nagri script words in images, runs OCR (CRNN + ViT), and reconstructs the text as HTML with the Surma font embedded.
