@@ -27,8 +27,8 @@ COPY model_weights.weights.h5 vit_model_weights.weights.h5 ./
 
 USER appuser
 
-EXPOSE 8501
+EXPOSE 8080
 
-HEALTHCHECK CMD curl --fail http://localhost:8501/_stcore/health || exit 1
+HEALTHCHECK CMD curl --fail http://localhost:${PORT:-8080}/_stcore/health || exit 1
 
-CMD ["streamlit", "run", "streamlit_app.py", "--server.address=0.0.0.0", "--server.port=8501"]
+CMD ["sh", "-c", "streamlit run streamlit_app.py --server.address=0.0.0.0 --server.port=${PORT:-8080}"]
