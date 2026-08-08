@@ -770,6 +770,10 @@ with gr.Blocks(title="Sylheti Nagri OCR") as demo:
     copy_status = gr.Markdown()
 
     status = gr.Markdown()
+    gr.Markdown(
+        '<p style="text-align: center; color: #888; margin-top: 20px;">'
+        'Made by Md Ariful Haque, Md. Mostafizur Rahman, Mayeenul Islam Mayeen, Fabiha Farzana</p>'
+    )
 
     state = gr.State()
 
