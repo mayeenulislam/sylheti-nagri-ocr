@@ -766,6 +766,11 @@ with gr.Blocks(title="Sylheti Nagri OCR") as demo:
     with gr.Row():
         html_file_out = gr.File(label="Download HTML Reconstruction", scale=0)
         copy_btn = gr.Button("Copy HTML", scale=0)
+        gr.HTML(
+            '<a href="https://mayeenulislam.github.io/nagri-bangla/" target="_blank" '
+            'style="margin-left: 10px; font-size: 14px;">'
+            'Can\'t Read? Use This Nagri Transcriber</a>'
+        )
     html_src = gr.Textbox(visible=False)
     copy_status = gr.Markdown()
 
