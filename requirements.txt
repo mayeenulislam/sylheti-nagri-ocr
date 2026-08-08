@@ -1,4 +1,9 @@
 apsisocr==0.0.7
+fastdeploy-python==1.0.7
+# upstream fastdeploy-tools==0.0.5 pins uvicorn==0.16.0 (conflicts with gradio's
+# mcp extra, uvicorn>=0.31.1). This patched wheel (v0.0.6, no uvicorn pin) is
+# hosted in the repo; pip fetches it by URL since the build only mounts requirements.txt.
+https://huggingface.co/spaces/mayeenulislam/sylheti-nagri-ocr/resolve/main/wheels/fastdeploy_tools-0.0.6-py3-none-any.whl
 numpy==1.23.5
 opencv-python==4.11.0.86
 onnxruntime
