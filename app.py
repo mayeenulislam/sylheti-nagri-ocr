@@ -29,7 +29,7 @@ from mltu.tensorflow.model_utils import residual_block
 tf.keras.config.enable_unsafe_deserialization()
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-FONT_PATH = os.path.join(SCRIPT_DIR, "Surma-4.000", "Surma-Regular.ttf")
+FONT_PATH = os.path.join(SCRIPT_DIR, "fonts", "Surma-Regular.ttf")
 BUNDLED_DETECTOR_DIR = os.path.join(SCRIPT_DIR, "models", "detector", "word")
 DETECTOR_FILES = ["inference.pdmodel", "inference.pdiparams", "inference.pdiparams.info"]
 
@@ -499,8 +499,8 @@ def generate_html(sorted_word_data, crops, model, resizer, vocab, font_path):
 from functools import lru_cache
 
 RECOGNIZERS = {
-    "CRNN": {"config": "configs.yaml", "weights": "model_weights.weights.h5"},
-    "ViT": {"config": "vit_configs.yaml", "weights": "vit_model_weights.weights.h5"},
+    "CRNN": {"config": "configs.yaml", "weights": os.path.join("weights", "model_weights.weights.h5")},
+    "ViT": {"config": "vit_configs.yaml", "weights": os.path.join("weights", "vit_model_weights.weights.h5")},
 }
 
 
@@ -565,7 +565,7 @@ PAD = 3
 def load_sample(sample_name):
     if not sample_name or sample_name == "Upload my own":
         return None
-    path = os.path.join(SCRIPT_DIR, "sample_page", sample_name)
+    path = os.path.join(SCRIPT_DIR, "samples", sample_name)
     img = cv2.imread(path)
     if img is None:
         raise FileNotFoundError(f"Sample image not found: {path}")

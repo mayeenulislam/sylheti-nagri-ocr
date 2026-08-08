@@ -2,6 +2,14 @@
 
 Detects and crops Sylheti Nagri script words in images, runs OCR (CRNN + ViT), and reconstructs the text as HTML with the Surma font embedded.
 
+## Layout
+
+- `app.py` — Gradio app (deployed product)
+- `samples/` — sample images loaded by the app
+- `assets/`, `models/detector/word/`, `fonts/`, `weights/` — logo, detector models, fonts, OCR weights
+- `wheels/` — patched `fastdeploy_tools` wheel fetched by `requirements.txt`
+- `scripts/` — assert-based test scripts
+
 ## Features
 
 - Word detection and cropping
@@ -38,11 +46,15 @@ python scripts/smoke_test.py   # slow: end-to-end on 3 samples, both models
 
 ## Model weights
 
-Keep at the repo root (all required at runtime):
+Required at runtime:
 
-- `model_weights.weights.h5` — CRNN OCR (~1.1 MB)
-- `vit_model_weights.weights.h5` — ViT OCR (~11 MB)
-- `Surma-4.000/Surma-Regular.ttf` — output font
+- `weights/model_weights.weights.h5` — CRNN OCR (~1.1 MB)
+- `weights/vit_model_weights.weights.h5` — ViT OCR (~11 MB)
+- `fonts/Surma-Regular.ttf` — output font
+
+## Font license
+
+`fonts/Surma-Regular.ttf` is Copyright (c) 1999-2021, Sylheti Translation And Research (<http://www.sylheti.org.uk/>), with Reserved Font Name "Surma", and is licensed under the SIL Open Font License, Version 1.1. The license and full details are available at <https://openfontlicense.org/>.
 
 ## Notes
 

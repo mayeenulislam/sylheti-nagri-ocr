@@ -4,8 +4,8 @@ Sylheti Nagri OCR: detects/crops Sylheti script words, OCRs them (CRNN + ViT), r
 
 ## Branch & remote model (critical)
 
-- `main` = **Gradio app** (`app.py`). This is the deployed, working product.
-- `streamlit` = **Streamlit app** (`streamlit_app.py` / `streamlit_vit.py`, Docker). Legacy variant; keep in sync when touching shared code.
+- `main` = **Gradio app** (`app.py`). This is the deployed, working product. No Streamlit files live here.
+- `streamlit` = **Streamlit app** (`streamlit_app.py` / `streamlit_vit.py`, Docker) — lives entirely on its own branch at repo root; checkout `streamlit` to work on it. It shares `configs.yaml` / `vit_configs.yaml` / weights with `main`, so keep those in sync when touching them.
 - `origin` = GitHub, `hf` = HuggingFace Space (`spaces/mayeenulislam/sylheti-nagri-ocr`). Deployment = pushing `main` to `hf` (Space builds from `main`).
 - Do NOT push binary/LFS assets to `hf` with plain `git push`; use `git lfs push` for large files. `wheels/` is tracked on `main` because the HF build only mounts `requirements.txt`.
 - The `streamlit` branch (6e8e765) is a rewritten history with real file blobs baked in and **no `.gitattributes`**; `main` uses git-lfs pointers. They are the same app code — do not "reconcile" the trees.
@@ -37,13 +37,14 @@ Run inside the venv. `smoke_test.py` is the full end-to-end check.
 
 ## Hard version constraints (do not upgrade)
 
-`numpy==1.23.5`, `opencv-python==4.11.0.86`, `apsisocr==0.0.7`, `fastdeploy-python==1.0.7`, `tensorflow==2.17.1` (loaded via `tf.keras.config.enable_unsafe_deserialization()`), `mltu` (provides `CTCloss`, `CWERMetric`, `ImageResizer`). Custom model architectures (CRNN+BiLSTM, ViT) are defined inline in `app.py`/`streamlit_vit.py`.
+`numpy==1.23.5`, `opencv-python==4.11.0.86`, `apsisocr==0.0.7`, `fastdeploy-python==1.0.7`, `tensorflow==2.17.1` (loaded via `tf.keras.config.enable_unsafe_deserialization()`), `mltu` (provides `CTCloss`, `CWERMetric`, `ImageResizer`). Custom model architectures (CRNN+BiLSTM, ViT) are defined inline in `app.py`.
 
 ## HF Space quirks
 
 - Gradio handlers are decorated with `@spaces.GPU(duration=60)` — ZeroGPU requires this on HF; harmless locally.
-- `sample_page/` must NOT be excluded from the Space build (app loads samples at startup) — `.dockerignore` excludes it for local Docker only.
-- CPU inference; weights `model_weights.weights.h5` (CRNN, ~1.1 MB) and `vit_model_weights.weights.h5` (ViT, ~11 MB) must be present at repo root.
+- `samples/` must NOT be excluded from the Space build (app loads samples at startup) — `.dockerignore` excludes it for local Docker only.
+- `packages.txt` is installed by HF Space via apt (needs `libgl1`, `libglib2.0-0`, etc. for OpenCV) — keep it at repo root.
+- CPU inference; weights `weights/model_weights.weights.h5` (CRNN, ~1.1 MB) and `weights/vit_model_weights.weights.h5` (ViT, ~11 MB) must be present.
 
 ## Not committed on purpose
 
