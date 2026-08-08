@@ -553,7 +553,11 @@ def get_recognizer(name):
     return _load_recognizer(name)
 
 
-SAMPLE_IMAGES = ["3.PNG", "old_testament.PNG", "old_testament2.JPG"]
+SAMPLE_IMAGES = [
+    {"file": "Gospel-Mathew.PNG", "label": "Gospel of Mathew"},
+    {"file": "Book-Exodus.JPG", "label": "Book of Exodus"},
+    {"file": "Sylheti-Folklore.PNG", "label": "Sylheti Folklore: Shaat Koinar Bakhan"},
+]
 PAD = 3
 
 
@@ -693,22 +697,44 @@ def _ui_load_sample(sample_name):
 
 
 with gr.Blocks(title="Sylheti Nagri OCR") as demo:
-    gr.Markdown("# Sylheti Nagri OCR and HTML Reconstruction\n"
-                "Upload an image containing Sylheti Nagri script, or pick a sample, "
-                "to detect words, crop them, and generate an HTML reconstruction.")
+    logo_b64 = base64.b64encode(open(os.path.join(SCRIPT_DIR, "assets", "nagri-ocr-logo.png"), "rb").read()).decode()
+    gr.Markdown(
+        f'<div style="display: flex; align-items: center; gap: 12px;">'
+        f'<img src="data:image/png;base64,{logo_b64}" style="width: 56px; height: 56px; border-radius: 12px; flex-shrink: 0;">'
+        f'<div>'
+        f'<h1 style="margin: 0; font-size: 1.6rem;">Sylheti Nagri OCR and HTML Reconstruction</h1>'
+        f'<p style="margin: 0; color: #666;">Upload an image containing Sylheti Nagri script, or pick a sample, '
+        f'to detect words, crop them, and generate an HTML reconstruction.</p>'
+        f'</div>'
+        f'</div>'
+    )
 
     # ROW 1: settings (left) | image input + step 1 (right)
     with gr.Row():
         with gr.Column():
             model_choice = gr.Radio(["CRNN", "ViT"], value="CRNN", label="OCR Model")
-            sample_choice = gr.Dropdown(
-                ["Upload my own"] + SAMPLE_IMAGES,
-                value="Upload my own",
-                label="No Nagri image handy? Pick a sample:",
-            )
+            gr.Markdown("**No Nagri image handy? Pick a sample:**")
+            sample_buttons = []
+            with gr.Row():
+                for sample in SAMPLE_IMAGES:
+                    with gr.Column(min_width=110):
+                        gr.Image(
+                            value=load_sample(sample["file"]),
+                            interactive=False,
+                            show_label=False,
+                            height=90,
+                            width=150,
+                        )
+                        btn = gr.Button(sample["label"], size="sm")
+                        sample_buttons.append((btn, sample["file"]))
+            upload_btn = gr.Button("Upload your Own")
         with gr.Column():
             image_input = gr.Image(type="numpy", label="Image (upload or from sample)")
             detect_btn = gr.Button("Step 1: Detect & Crop")
+
+    for btn, fname in sample_buttons:
+        btn.click(lambda f=fname: _ui_load_sample(f), None, image_input)
+    upload_btn.click(lambda: None, None, image_input)
 
     # ROW 2: detected boxes (left) | metadata + downloads (right)
     with gr.Row():
@@ -730,7 +756,6 @@ with gr.Blocks(title="Sylheti Nagri OCR") as demo:
 
     state = gr.State()
 
-    sample_choice.change(_ui_load_sample, sample_choice, image_input)
     detect_btn.click(
         _ui_detect_and_crop,
         [image_input],
@@ -744,4 +769,4 @@ with gr.Blocks(title="Sylheti Nagri OCR") as demo:
 
 
 if __name__ == "__main__":
-    demo.launch()
+    demo.launch(favicon_path=os.path.join(SCRIPT_DIR, "assets", "nagri-ocr-logo.png"))

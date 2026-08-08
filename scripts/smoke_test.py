@@ -5,7 +5,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 import app
 
-SAMPLES = ["3.PNG", "old_testament.PNG", "old_testament2.JPG"]
+SAMPLES = ["Gospel-Mathew.PNG", "Book-Exodus.JPG", "Sylheti-Folklore.PNG"]
 
 def line_count(html):
     return html.count('<div class="text-line"') if html else 0

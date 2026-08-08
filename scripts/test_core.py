@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 import app
 
 def test_load_sample():
-    img = app.load_sample("old_testament.PNG")
+    img = app.load_sample("Gospel-Mathew.PNG")
     assert img is not None and img.shape[2] == 3, "sample should load as RGB"
     assert app.load_sample("Upload my own") is None
 
