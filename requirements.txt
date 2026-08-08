@@ -1,11 +1,6 @@
 apsisocr==0.0.7
 numpy==1.23.5
 opencv-python==4.11.0.86
-# ponytail: upstream fastdeploy-tools==0.0.5 pins uvicorn==0.16.0, which conflicts
-# with gradio's [mcp] extra (uvicorn>=0.31.1). Local empty pkg (v0.0.6) satisfies
-# fastdeploy-python's >=0.0.5 requirement without the uvicorn pin.
-./wheels/fastdeploy-tools
-fastdeploy-python==1.0.7
 onnxruntime
 mltu
 tensorflow==2.17.1
